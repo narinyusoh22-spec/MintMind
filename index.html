@@ -1,1 +1,108 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>แดชบอร์ด | MintMind</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"><link href="css/app.css" rel="stylesheet"></head><body><nav class="navbar navbar-dark py-3"><div class="container"><a class="navbar-brand fw-bold fs-4" href="index.html"><i class="bi bi-pie-chart-fill brand-dot me-2"></i>MintMind</a><div class="d-flex gap-2"><button id="themeToggle" class="btn btn-sm btn-outline-light"></button><button id="logoutBtn" class="btn btn-sm btn-outline-light">ออกจากระบบ</button></div></div></nav><main class="container py-4 py-md-5"><section class="hero p-4 p-md-5 mb-4"><span class="badge text-bg-light text-success mb-2">ภาพรวมเดือนนี้</span><h1 class="display-6 fw-bold">จัดการเงิน และไม่พลาดสิ่งสำคัญ</h1><p class="mb-0 text-white-50">บันทึกทุกการใช้จ่าย รับคำแนะนำ และตั้งเตือนในที่เดียว</p></section><ul class="nav nav-pills gap-2 mb-4"><li><a class="nav-link active" href="index.html"><i class="bi bi-grid"></i> แดชบอร์ด</a></li><li><a class="nav-link" href="transactions.html"><i class="bi bi-receipt"></i> รายการเงิน</a></li><li><a class="nav-link" href="reminders.html"><i class="bi bi-bell"></i> การเตือน</a></li><li><a class="nav-link" href="planner.html"><i class="bi bi-bullseye"></i> วางแผน</a></li></ul><div class="row g-3 mb-4"><div class="col-md-4"><div class="card p-3 d-flex flex-row gap-3"><div class="metric-icon income"><i class="bi bi-arrow-down-left"></i></div><div><small>รายรับ</small><div class="fs-4 fw-bold" id="incomeTotal">฿0</div></div></div></div><div class="col-md-4"><div class="card p-3 d-flex flex-row gap-3"><div class="metric-icon expense"><i class="bi bi-arrow-up-right"></i></div><div><small>รายจ่าย</small><div class="fs-4 fw-bold" id="expenseTotal">฿0</div></div></div></div><div class="col-md-4"><div class="card p-3 d-flex flex-row gap-3"><div class="metric-icon balance"><i class="bi bi-wallet2"></i></div><div><small>คงเหลือ</small><div class="fs-4 fw-bold" id="balanceTotal">฿0</div></div></div></div></div><div class="row g-4"><div class="col-lg-7"><div class="card p-4"><h2 class="h5">รายจ่ายตามหมวดหมู่</h2><div id="bars" class="empty py-3">เพิ่มรายการรายจ่ายเพื่อดูภาพรวม</div></div></div><div class="col-lg-5"><div class="card ai-card p-4"><h2 class="h5"><i class="bi bi-stars me-2"></i>AI Financial Coach</h2><p id="advice" class="small">เพิ่มรายการก่อน แล้ว AI จะช่วยวิเคราะห์ให้คุณ</p><button id="analyze" class="btn btn-dark btn-sm">วิเคราะห์ตอนนี้</button></div></div><div class="col-lg-7"><div class="card p-4"><h2 class="h5">แนวโน้มรายจ่าย 6 เดือน</h2><div id="trend" class="d-flex align-items-end gap-2" style="height:170px"></div></div></div><div class="col-lg-5"><div class="card p-4"><h2 class="h5">สถานะงบประมาณ</h2><div id="budgetStatus" class="empty">ตั้งงบรายเดือนได้ที่หน้า วางแผน</div></div></div></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/dashboard.js"></script></body></html>
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#075043">
+  <title>แดชบอร์ด | MintMind</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/app.css" rel="stylesheet">
+  <link href="css/dashboard-polish.css" rel="stylesheet">
+</head>
+<body class="dashboard-static-motion">
+  <nav class="navbar navbar-dark py-3">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4" href="index.html"><i class="bi bi-pie-chart-fill brand-dot me-2"></i>MintMind</a>
+      <div class="d-flex gap-2">
+        <button id="themeToggle" class="btn btn-sm btn-outline-light"></button>
+        <button id="logoutBtn" class="btn btn-sm btn-outline-light">ออกจากระบบ</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4 py-md-5 dashboard-page">
+    <section class="hero dashboard-hero p-4 p-md-5 mb-4" aria-labelledby="dashboardTitle">
+      <span class="badge text-bg-light text-success mb-2"><i class="bi bi-stars me-1"></i>ภาพรวมการเงิน</span>
+      <h1 id="dashboardTitle" class="display-6 fw-bold">เงินของคุณ ดูแลง่ายขึ้น</h1>
+      <p class="mb-0 text-white-50">ติดตามรายรับ รายจ่าย และเป้าหมายการเงินของคุณในที่เดียว</p>
+    </section>
+
+    <ul class="nav nav-pills gap-2 mb-4">
+      <li><a class="nav-link active" href="index.html"><i class="bi bi-grid"></i> แดชบอร์ด</a></li>
+      <li><a class="nav-link" href="transactions.html"><i class="bi bi-receipt"></i> รายการเงิน</a></li>
+      <li><a class="nav-link" href="reminders.html"><i class="bi bi-bell"></i> การเตือน</a></li>
+      <li><a class="nav-link" href="planner.html"><i class="bi bi-bullseye"></i> วางแผน</a></li>
+    </ul>
+
+    <div class="row g-3 mb-4 dashboard-summary">
+      <div class="col-12 col-lg-6">
+        <section class="card dashboard-balance-card h-100">
+          <div class="balance-card-copy">
+            <span class="dashboard-overline"><i class="bi bi-wallet2"></i> ยอดคงเหลือสุทธิ</span>
+            <strong id="balanceTotal" class="dashboard-balance-amount">฿0</strong>
+            <span class="balance-card-note"><i class="bi bi-shield-check"></i> รายรับรวม หักรายจ่ายรวม</span>
+          </div>
+          <div class="balance-card-art" aria-hidden="true"><i class="bi bi-wallet2"></i><span>฿</span></div>
+        </section>
+      </div>
+      <div class="col-6 col-lg-3">
+        <section class="card dashboard-metric-card income-card h-100">
+          <span class="metric-icon income"><i class="bi bi-arrow-down-left"></i></span>
+          <div class="metric-copy"><small>รายรับรวม</small><strong id="incomeTotal">฿0</strong><span>เงินที่รับเข้ามา</span></div>
+        </section>
+      </div>
+      <div class="col-6 col-lg-3">
+        <section class="card dashboard-metric-card expense-card h-100">
+          <span class="metric-icon expense"><i class="bi bi-arrow-up-right"></i></span>
+          <div class="metric-copy"><small>รายจ่ายรวม</small><strong id="expenseTotal">฿0</strong><span>เงินที่ใช้จ่ายไป</span></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="row g-4 dashboard-content">
+      <div class="col-lg-7">
+        <section class="card p-4 dashboard-panel dashboard-category-panel">
+          <div class="dashboard-panel-heading">
+            <span class="panel-icon category-panel-icon"><i class="bi bi-pie-chart-fill"></i></span>
+            <span><h2>รายจ่ายตามหมวดหมู่</h2><small>ดูว่าส่วนใหญ่ใช้ไปกับอะไร</small></span>
+          </div>
+          <div id="bars" class="empty py-3">เพิ่มรายการรายจ่ายเพื่อดูภาพรวม</div>
+        </section>
+      </div>
+      <div class="col-lg-5">
+        <section class="card ai-card p-4 dashboard-panel dashboard-ai-card">
+          <div class="dashboard-panel-heading">
+            <span class="panel-icon ai-panel-icon"><i class="bi bi-stars"></i></span>
+            <span><h2>AI Financial Coach</h2><small>คำแนะนำจากพฤติกรรมการใช้เงิน</small></span>
+          </div>
+          <p id="advice" class="small">เพิ่มรายการก่อน แล้ว AI จะช่วยวิเคราะห์ให้คุณ</p>
+          <button id="analyze" class="btn btn-dark btn-sm"><i class="bi bi-magic me-1"></i>วิเคราะห์ตอนนี้</button>
+        </section>
+      </div>
+      <div class="col-lg-7">
+        <section class="card p-4 dashboard-panel trend-panel">
+          <div class="dashboard-panel-heading">
+            <span class="panel-icon trend-panel-icon"><i class="bi bi-bar-chart-line-fill"></i></span>
+            <span><h2>แนวโน้มรายจ่าย</h2><small>เปรียบเทียบการใช้จ่ายย้อนหลัง 6 เดือน</small></span>
+          </div>
+          <div id="trend" class="d-flex align-items-end gap-2" style="height:170px"></div>
+        </section>
+      </div>
+      <div class="col-lg-5">
+        <section class="card p-4 dashboard-panel budget-panel">
+          <div class="dashboard-panel-heading">
+            <span class="panel-icon budget-panel-icon"><i class="bi bi-bullseye"></i></span>
+            <span><h2>สถานะงบประมาณ</h2><small>ติดตามงบรายหมวดของคุณ</small></span>
+          </div>
+          <div id="budgetStatus" class="empty">ตั้งงบรายเดือนได้ที่หน้าวางแผน</div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

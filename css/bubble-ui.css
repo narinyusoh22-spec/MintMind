@@ -1,0 +1,29 @@
+/* Soft liquid glass bubbles and spring-like interactions */
+:root{--bubble-green:rgba(22,190,143,.22);--bubble-gold:rgba(232,183,67,.2);--spring:cubic-bezier(.22,1.18,.36,1)}
+.bubble-scene{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;contain:strict;isolation:isolate}
+body>*:not(.bubble-scene){position:relative;z-index:1}
+.bubble-orb{position:absolute;display:block;border-radius:50%;opacity:0;transform:translate3d(0,24px,0) scale(.72);filter:blur(.3px);background:radial-gradient(circle at 32% 27%,rgba(255,255,255,.86) 0 3%,rgba(255,255,255,.34) 8%,var(--orb-color) 38%,rgba(255,255,255,.05) 72%,transparent 74%);border:1px solid rgba(255,255,255,.48);box-shadow:inset -9px -12px 23px rgba(255,255,255,.12),inset 7px 8px 18px rgba(255,255,255,.34),0 18px 38px rgba(14,76,58,.08);animation:bubbleEnter .95s var(--spring) forwards,bubbleDrift var(--drift,19s) ease-in-out var(--delay,0s) infinite alternate}
+.bubble-orb:nth-child(odd){--orb-color:var(--bubble-green)}.bubble-orb:nth-child(even){--orb-color:var(--bubble-gold)}
+.bubble-orb:nth-child(1){width:clamp(66px,10vw,142px);height:clamp(66px,10vw,142px);left:5%;top:24%;--drift:21s;--delay:-8s}
+.bubble-orb:nth-child(2){width:clamp(38px,5vw,74px);height:clamp(38px,5vw,74px);right:8%;top:17%;--drift:16s;--delay:-3s}
+.bubble-orb:nth-child(3){width:clamp(54px,7vw,98px);height:clamp(54px,7vw,98px);right:13%;bottom:19%;--drift:24s;--delay:-13s}
+.bubble-orb:nth-child(4){width:clamp(28px,3.5vw,52px);height:clamp(28px,3.5vw,52px);left:27%;bottom:12%;--drift:18s;--delay:-5s}
+.bubble-orb:nth-child(5){width:clamp(22px,2.5vw,38px);height:clamp(22px,2.5vw,38px);left:73%;top:49%;--drift:14s;--delay:-10s}
+.bubble-orb:nth-child(6){width:clamp(42px,6vw,82px);height:clamp(42px,6vw,82px);left:47%;top:8%;--drift:26s;--delay:-17s}
+.hero,.card,.bank-quick-actions a,.nav-pills .nav-link,.btn{transform-origin:center;transition:transform .38s var(--spring),box-shadow .38s ease,border-color .28s ease,background-color .28s ease}
+.card:active,.bank-quick-actions a:active{transform:scale(.985)}
+.btn:active,.nav-pills .nav-link:active,.bank-account-chip button:active{transform:scale(.955)}
+.bank-quick-actions a:hover{transform:translateY(-4px) scale(1.025)}
+.nav-pills .nav-link.active{position:relative;overflow:hidden}
+.nav-pills .nav-link.active:after{content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;background:linear-gradient(112deg,transparent 18%,rgba(255,255,255,.28) 43%,transparent 68%);transform:translateX(-130%);animation:tabSheen 5.5s ease-in-out 1.2s infinite}
+.hero:after{animation:heroBubbleGlow 9s ease-in-out infinite alternate}
+.hero:before{will-change:transform,opacity}
+.metric-icon{transition:transform .55s var(--spring),box-shadow .4s ease}
+.card:hover .metric-icon{transform:translateY(-2px) rotate(-5deg) scale(1.07);box-shadow:0 10px 22px rgba(15,106,79,.16)}
+.form-control:focus,.form-select:focus{transform:scale(1.008);transition:transform .3s var(--spring),box-shadow .25s ease,border-color .25s ease}
+@keyframes bubbleEnter{to{opacity:.76;transform:translate3d(0,0,0) scale(1)}}
+@keyframes bubbleDrift{0%{translate:0 0;rotate:-7deg}50%{translate:12px -19px;rotate:5deg}100%{translate:-9px 13px;rotate:10deg}}
+@keyframes tabSheen{0%,68%,100%{transform:translateX(-130%)}84%{transform:translateX(130%)}}
+@keyframes heroBubbleGlow{0%{transform:translate(0,0) scale(.94);opacity:.55}100%{transform:translate(-16px,13px) scale(1.08);opacity:.9}}
+@media(max-width:767px){.bubble-orb{opacity:.58}.bubble-orb:nth-child(1){left:-2%;top:29%}.bubble-orb:nth-child(2){right:-2%;top:13%}.bubble-orb:nth-child(3){right:0;bottom:15%}.bubble-orb:nth-child(4){left:17%;bottom:9%}.bubble-orb:nth-child(5){left:78%;top:57%}.bubble-orb:nth-child(6){left:54%;top:5%}.card:hover,.bank-quick-actions a:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){.bubble-orb,.hero:after,.nav-pills .nav-link.active:after{animation:none!important;opacity:.35;transform:none}.hero,.card,.bank-quick-actions a,.nav-pills .nav-link,.btn,.metric-icon,.form-control,.form-select{transition:none!important}}
