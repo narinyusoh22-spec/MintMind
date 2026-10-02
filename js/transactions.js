@@ -12,6 +12,32 @@ const visible = () => tx.filter(item =>
   (!el('filterMonth').value || String(item.date).startsWith(el('filterMonth').value)) &&
   (`${item.description} ${item.category}`).toLowerCase().includes(el('searchInput').value.toLowerCase())
 );
+const filters=el('searchInput').closest('.transaction-filters');
+const filterReset=document.createElement('button');
+filterReset.type='button';filterReset.className='tx-filter-reset';filterReset.innerHTML='<i class="bi bi-arrow-counterclockwise"></i><span>ล้างตัวกรอง</span>';
+filterReset.onclick=()=>{el('searchInput').value='';el('filterType').value='';el('filterMonth').value='';render()};
+filters?.after(filterReset);
+const txSummary=document.createElement('section');
+txSummary.className='tx-period-summary';txSummary.setAttribute('aria-label','สรุปยอดรายการที่แสดง');txSummary.setAttribute('aria-live','polite');
+txSummary.innerHTML='<div class="tx-summary-heading"><strong>สรุปรายการที่แสดง</strong><small id="txSummaryScope">ตามตัวกรองทั้งหมด</small></div><div class="tx-summary-metrics"><div class="tx-summary-item income"><small>รายรับ</small><strong id="txSummaryIncome">฿0</strong></div><div class="tx-summary-item expense"><small>รายจ่าย</small><strong id="txSummaryExpense">฿0</strong></div><div class="tx-summary-item net"><small>สุทธิ</small><strong id="txSummaryNet">฿0</strong></div></div>';
+filterReset.after(txSummary);
+let receiptPreviewRun=0;
+const loadReceiptPreviews=async()=>{
+  const run=++receiptPreviewRun;
+  const buttons=[...document.querySelectorAll('#rows .tx-receipt[data-path]')].filter(button=>!button.dataset.path.startsWith('http')&&/\.(jpe?g|png|webp)$/i.test(button.dataset.path));
+  const paths=[...new Set(buttons.map(button=>button.dataset.path))].slice(0,40);
+  if(!paths.length)return;
+  const{data,error}=await db.storage.from('receipts').createSignedUrls(paths,300);
+  if(error||run!==receiptPreviewRun)return;
+  const previews=new Map((data||[]).filter(item=>item.signedUrl).map(item=>[item.path,item.signedUrl]));
+  buttons.forEach(button=>{const url=previews.get(button.dataset.path);if(!url)return;const image=document.createElement('img');image.src=url;image.alt='';image.loading='lazy';image.decoding='async';button.replaceChildren(image);button.classList.add('has-preview')});
+};
+const updateTxSummary=entries=>{
+  const income=entries.filter(item=>item.type==='income').reduce((sum,item)=>sum+Number(item.amount),0);
+  const expense=entries.filter(item=>item.type==='expense').reduce((sum,item)=>sum+Number(item.amount),0);
+  el('txSummaryIncome').textContent=money(income);el('txSummaryExpense').textContent=money(expense);el('txSummaryNet').textContent=`${income-expense<0?'−':income-expense>0?'+':''}${money(Math.abs(income-expense))}`;
+  const month=el('filterMonth').value;el('txSummaryScope').textContent=month?new Date(`${month}-01T00:00:00`).toLocaleDateString('th-TH',{month:'long',year:'numeric'}):'ทุกช่วงเวลาที่ตรงกับตัวกรอง';
+};
 const categoryStyle = category => {
   const value = String(category || '').toLowerCase();
   if (/อาหาร|กาแฟ|ร้าน/.test(value)) return { icon: 'bi-cup-hot-fill', color: 'food' };
@@ -54,6 +80,7 @@ const render = () => {
     });
   });
   el('rows').innerHTML = rows.join('') || '<tr><td colspan="5" class="text-center empty py-5"><i class="bi bi-search d-block fs-3 mb-2"></i>ไม่พบรายการ ลองเปลี่ยนคำค้นหาหรือตัวกรอง</td></tr>';
+  updateTxSummary(entries);loadReceiptPreviews();
 };
 [el('searchInput'), el('filterType'), el('filterMonth')].forEach(input => input.oninput = render);
 const submitBtn = el('transactionForm').querySelector('.btn-success');
