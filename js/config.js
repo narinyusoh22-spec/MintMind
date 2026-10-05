@@ -45,4 +45,4 @@ const bubbleScript=document.createElement('script');bubbleScript.src='js/bubble-
 const secondaryStyles=document.createElement('link');secondaryStyles.rel='stylesheet';secondaryStyles.href='css/secondary-pages.css';document.head.append(secondaryStyles);
 const appExperienceStyles=document.createElement('link');appExperienceStyles.rel='stylesheet';appExperienceStyles.href='css/app-experience.css?v=20261005-1';document.head.append(appExperienceStyles);
 const appExperienceScript=document.createElement('script');appExperienceScript.src='js/app-experience.js?v=20261005-1';document.head.append(appExperienceScript);
-
+const darkModeStyles=document.createElement('link');darkModeStyles.rel='stylesheet';darkModeStyles.href='css/dark-mode.css?v=20261005-2';document.head.append(darkModeStyles);
