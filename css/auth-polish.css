@@ -4,6 +4,8 @@
 }
 
 .auth-card {
+  position: relative;
+  isolation: isolate;
   max-width: 940px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .76);
@@ -232,6 +234,59 @@ body.dark .auth-panel .auth-input-wrap .form-control,
 body.dark .auth-panel .auth-password-wrap .form-control { border-color: #365247; color: #eff9f1; background: rgba(13, 37, 32, .78); }
 body.dark .auth-panel .auth-input-wrap .form-control::placeholder { color: #8fa298; }
 
+.auth-transition-blade {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateX(-101%);
+  background:
+    radial-gradient(ellipse at 50% 48%, rgba(31, 155, 111, .42), transparent 38%),
+    linear-gradient(112deg, #031711 0%, #064336 48%, #09281f 100%);
+  border-block: 1px solid rgba(255, 218, 127, .34);
+  box-shadow: 0 0 48px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+.auth-transition-blade::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, #ffe29a 24%, #f0c45a 76%, transparent);
+  box-shadow: 0 0 24px rgba(255, 218, 127, .72);
+  content: "";
+}
+
+.auth-blade-core {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  color: #f0f8ee;
+  font-size: clamp(1.1rem, 3vw, 1.55rem);
+  font-weight: 850;
+  letter-spacing: -.04em;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, .28);
+}
+
+.auth-blade-core i {
+  color: #ffdf87;
+  filter: drop-shadow(0 0 12px rgba(255, 220, 125, .38));
+}
+
+.auth-card.auth-switching .auth-transition-blade {
+  animation: auth-blade-sweep .74s cubic-bezier(.76, 0, .24, 1) both;
+}
+
+@keyframes auth-blade-sweep {
+  0% { transform: translateX(-101%); }
+  45%, 55% { transform: translateX(0); }
+  100% { transform: translateX(101%); }
+}
+
 @keyframes authFloat { 50% { transform: translate(-12px, 18px) rotate(14deg) scale(1.07); } }
 
 @media (max-width: 767.98px) {
@@ -256,4 +311,5 @@ body.dark .auth-panel .auth-input-wrap .form-control::placeholder { color: #8fa2
 
 @media (prefers-reduced-motion: reduce) {
   .auth-orb { animation: none; }
+  .auth-transition-blade { display: none; }
 }
